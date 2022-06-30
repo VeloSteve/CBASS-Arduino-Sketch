@@ -8,17 +8,15 @@ If you want to use this code you will need a CBASS-R "shield", an Arduino MEGA, 
 
 NOTE: this sketch depends on a number of specific libraries, some of which are out of date.  An issue will be filled to consider updating.  Currently you will need to install
 
-Sorry - testing table preview before completing it - trying empty lines before and after per stackoverflow.
-
 | Name | Version used | URL from properties |
+| ---|---|---|
 | Adafruit_ILI934 | 1.5.8 | https://github.com/adafruit/Adafruit_ILI9341 |
 | SD | 1.2.2 | http://www.arduino.cc/en/Reference/SD |
-
-- SPI (where)
-- PID
-- OneWire
-- DallasTemperature
-- RTClib
-- avr/wdt.h
-- Adafruit_BLE
-- Adafrut_BluefruitLE_SPI
+| SPI | ??? | (where?) |
+| PID | 1.2.0 | http://playground.arduino.cc/Code/PIDLibrary |
+| OneWire | 2.3.5 | http://www.pjrc.com/teensy/td_libs_OneWire.html |
+| DallasTemperature | 3.9.0 | https://github.com/milesburton/Arduino-Temperature-Control-Library |
+| RTClib | 1.2.1 | https://github.com/adafruit/RTClib |
+| avr/wdt.h | ? | built in? |
+| Adafruit_BLE | 1.10.0 | https://github.com/adafruit/Adafruit_BluefruitLE_nRF51 |
+| Adafrut_BluefruitLE_SPI | https://github.com/adafruit/Adafruit_BluefruitLE_nRF51 |
