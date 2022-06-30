@@ -8,11 +8,12 @@ If you want to use this code you will need a CBASS-R "shield", an Arduino MEGA, 
 
 NOTE: this sketch depends on a number of specific libraries, some of which are out of date.  An issue will be filled to consider updating.  Currently you will need to install
 
-(sorry - testing table preview before completing it)
+(sorry - testing table preview before completing it - trying empty lines before and after per stackoverflow...)
 
 | Name | Version used | URL from properties |
 | Adafruit_ILI934 | 1.5.8 | https://github.com/adafruit/Adafruit_ILI9341 |
 | SD | 1.2.2 | http://www.arduino.cc/en/Reference/SD |
+
 - SPI (where)
 - PID
 - OneWire
