@@ -1,0 +1,42 @@
+The original Settings.ini would typically begin with something like this:
+0:05	30	30	30	30
+1:05	30	30	30	30
+2:05	30	30	30	30
+3:05	30	30	30	30
+4:05	30	30	30	30
+until the ramp, where lines might look like:
+13:00	30	30	30	30
+13:05	30	30	30.081	30.081
+13:10	30	30	30.162	30.162
+13:15	30	30	30.243	30.243
+13:20	30	30	30.324	30.324
+
+While this was flexible, there were two drawbacks:
+1) The large amount of data meant that it had to be re-read from the SD card
+   at each step.
+2) Ramps were "choppy" with target temperatures stepping every 5 minutes.
+
+Two changes are meant to address that.
+1) By default temperatures are interpolated, so that linear ramps only require
+   the start and end points.
+2) With fewer points specified, memory requirements are small and the SD card is
+   only accessed at startup time.
+
+A third change is for convenience, and will also support adjusting the start time via Bluetooth without opening the box.
+
+3) A line beginning with START followed by a time becomes the "zero" time.  Using this with ramp definition lines starting from zero makes it easy to shift the ramp without redefining it.  For example, the lines below replace a traditional ramp plan starting at 1 PM:
+
+START 13:00
+0:00	30	30	30	30
+3:00	30	30	33	33
+6:00	30	30	33	33
+7:00	30	30	30	30
+
+What about complex ramp plans?  Plans of up to 200 defined points will load with room to spare.  If a smoother curve is needed, a cubic spline interpolation option could easily be added.
+
+The maximum number of points is defined in settings.h when compiling the Arduino sketch.  It is initially set to 20 to keep memory use low while accommodating more than triple the points needed for a standard run.
+
+Example files are in this directory.  They define the same plan using classic and new methods.
+
+
+A fine point on accuracy: ramp point temperatures are stored to the nearest 0.01 degree C, but interpolated values use full floating-point precision.
