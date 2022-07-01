@@ -16,7 +16,6 @@ NOTE: this sketch depends on a number of specific libraries, some of which are o
 | OneWire | 2.3.5 | http://www.pjrc.com/teensy/td_libs_OneWire.html |
 | DallasTemperature | 3.9.0 | https://github.com/milesburton/Arduino-Temperature-Control-Library |
 | RTClib | 1.2.1 | https://github.com/adafruit/RTClib |
-| avr/wdt.h | ? | built in? |
 | Adafruit_BLE | 1.10.0 | https://github.com/adafruit/Adafruit_BluefruitLE_nRF51 |
 | Adafrut_BluefruitLE_SPI | 1.10.0 | https://github.com/adafruit/Adafruit_BluefruitLE_nRF51 |
 
@@ -26,4 +25,10 @@ These libraries are not explictly included in the sketch, but must be present fo
 | ---|---|---|
 | Adafruit_BusIO | 1.7.3 | https://github.com/adafruit/Adafruit_BusIO |
 | Adafruit_GFX_Library | 1.10.10 | https://github.com/adafruit/Adafruit-GFX-Library
+
+This is opposite to those above.  It must be explicitly included, but does not need to be installed by you.  On my machine it is in
+<where software gets installed>\Arduino\hardware\tools\avr\avr\include\avr
+| Name | Version used? | URL from properties |
+| ---|---|---|
+| avr/wdt.h | arduino.avrdude=6.3.0-arduino17 <br/> arduino.arduinoOTA=1.3.0 <br/> arduino.avr-gcc=7.3.0-atmel3.6.1-arduino | n/a |
 
