@@ -24,7 +24,6 @@
 
 // SD card shield library
 #include <SD.h>
-//#include <SPI.h>
 // PID Library
 #include <PID_v1.h>
 //#include <PID_AutoTune_v0.h>

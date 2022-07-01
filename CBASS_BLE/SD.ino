@@ -380,6 +380,7 @@ void printAsHM(unsigned int t) {
     hundredths.
 
 */
+#ifdef USEBLE
 void saveGraphTemps() {
   logFile = SD.open("GRAPHPTS.TXT", FILE_WRITE);
   // Trust time "t" to be close enough, since it was set just before saving new
@@ -402,7 +403,7 @@ void saveGraphTemps() {
   logFile.println();
   logFile.close();
 }
-
+#endif // USEBLE
 
 /*
    Read from tryHere to a newline, into the provided buffer.
