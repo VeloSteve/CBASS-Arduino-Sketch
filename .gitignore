@@ -1,3 +1,9 @@
+# Editor temporaries
+*~
+*.swp
+*.swo
+
+
 # Prerequisites
 *.d
 
