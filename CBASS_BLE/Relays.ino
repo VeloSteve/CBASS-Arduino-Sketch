@@ -1,6 +1,3 @@
-
-
-
 void RelaysInit()
 {
   //-------( Initialize Pins so relays are inactive at reset)----

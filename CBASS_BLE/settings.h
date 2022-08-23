@@ -1,9 +1,13 @@
 #define NT 4  // The number of tanks supported.  This may always be 4.
 #define RELAY_PAUSE 5000 // Milliseconds to wait between some startup steps - standard is 5000, but a small number is handy when testing other things.
 
+# The original CBASS from the Barshis lab uses Iceprobe chillers.
+# The Logan lab modifications use moving cold water, and add light controls.
+// #define LOGANMODE  //Define for liquid cooling and lights.  Omit for the original behavior.
+
 #define USEBLE   // #define to use BLE, #undef USEBLE to remove all related code
 #ifdef USEBLE
-#define DEBUGBLE true // true for verbose debugging.  Normally false
+#define DEBUGBLE false // true for verbose debugging.  Normally false
 #define MAXPIN 15  // Do not change - the app and Arduino code much match.
 
 // A PIN which the app must send to carry out any command which affects CBASS timing or other function.
@@ -22,7 +26,11 @@ char BLENAME[2*MAXPIN+1] = "My CBASS A";
 double RAMP_START_TEMP[] = {30.5, 30.75, 30.5, 30.75};  // This becomes the temperature target at any time.
 const short MAX_RAMP_STEPS = 20; // Could be as low as 7, 24*12+1 allows every 5 minutes for a day, with endpoints.
 
+#ifdef LOGANMODE
+#define CHILLER_OFFSET 0.0
+#else
 #define CHILLER_OFFSET 0.20
+#endif
 const double TANK_TEMP_CORRECTION[] = {0, 0, 0, 0}; // Is a temperature correction for the temp sensor, the program subtracts this from the temp readout e.g. if the sensor reads low, this should be a negative number
 
 // ***** PID TUNING CONSTANTS ****
@@ -35,8 +43,14 @@ const double TANK_TEMP_CORRECTION[] = {0, 0, 0, 0}; // Is a temperature correcti
 
 // Arduino pin numbers for relays.
 // The integers correspond to the CBASS-R v 1.2 schematic.
-const int ChillRelay[] = {22, 23, 24, 25};
 const int HeaterRelay[] = {14, 15, 16, 17};
+#ifdef LOGANMODE
+const int ChillRelay[] = {40, 38, 36, 34}; 
+const int LightRelay[] = {22, 23, 24, 25}; 
+#else
+const int ChillRelay[] = {22, 23, 24, 25}; 
+#endif
+
 /* 
  *  Old version kept for DB9 pins and colors:
 #define T1HeaterRelay 17  // T1 Heat DB9 pin 9 black wire Arduino Digital I/O pin number 17
