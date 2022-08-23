@@ -1,11 +1,11 @@
 #define NT 4  // The number of tanks supported.  This may always be 4.
 #define RELAY_PAUSE 5000 // Milliseconds to wait between some startup steps - standard is 5000, but a small number is handy when testing other things.
 
-# The original CBASS from the Barshis lab uses Iceprobe chillers.
-# The Logan lab modifications use moving cold water, and add light controls.
-// #define LOGANMODE  //Define for liquid cooling and lights.  Omit for the original behavior.
+// The original CBASS from the Barshis lab uses Iceprobe chillers.
+// The Logan lab modifications use moving cold water, and add light controls.
+#define LOGANMODE  //#define for liquid cooling and lights.  Omit or #undef for the original behavior.
 
-#define USEBLE   // #define to use BLE, #undef USEBLE to remove all related code
+#undef USEBLE   // #define to use BLE, #undef USEBLE to remove all related code
 #ifdef USEBLE
 #define DEBUGBLE false // true for verbose debugging.  Normally false
 #define MAXPIN 15  // Do not change - the app and Arduino code much match.
