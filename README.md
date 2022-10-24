@@ -6,7 +6,7 @@ The one dramatic change is the addition of the ability to connect to CBASS via B
 
 If you want to use this code you will need a CBASS-R "shield", an Arduino MEGA, and [Adafruit's Bluefruit LE SPI friend](https://www.adafruit.com/product/2633) and you will need to build these into a full system.  Pop "CBASS coral research" into your favorite search engine to see what's going on.  If you are serious, get in touch.
 
-NOTE: this sketch depends on a number of specific libraries, some of which are out of date.  An issue will be filed to consider updating.  Currently you will need to install
+NOTE: this sketch depends on a number of specific libraries, some of which are out of date.  Newer versions may work, but have not been tested.  An issue will be filed to consider updating.  Currently you will need to install
 
 | Name | Version used | URL from properties |
 | ---|---|---|
