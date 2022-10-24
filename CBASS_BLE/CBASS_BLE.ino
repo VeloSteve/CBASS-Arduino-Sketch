@@ -68,14 +68,14 @@ short rampSteps = 0;  // Actual defined steps, <= MAX_RAMP_STEPS
 boolean interpolateT = true; // If true, interpolate between ramp points, otherwise step.  
 boolean relativeStart = false;  // Start from midnight (default) or a specified time.
 unsigned int relativeStartTime;  // Start time in minutes from midnight
-#ifdef LOGANMODE
+#ifdef COLDWATER
 // Light plan
 unsigned int lightMinutes[MAX_LIGHT_STEPS];
 byte lightStatus[MAX_LIGHT_STEPS];
 short lightSteps = 0;
 short lightPos = 0; // Current light state
 char LightStateStr[][4] = {"LLL", "LLL", "LLL", "LLL"}; // [number of entries][characters + null terminator]
-#endif // LOGANMODE
+#endif // COLDWATER
 
 //Temperature Variables
 double tempT[NT];
@@ -141,7 +141,7 @@ void setup()
 
   wdt_reset();
   readRampPlan();
-  #ifdef LOGANMODE
+  #ifdef COLDWATER
   readLightPlan();
   #endif
   wdt_reset();
@@ -241,7 +241,7 @@ void loop()
     timer24h = now_ms;
     getCurrentTargets();
     applyTargets();
-#ifdef LOGANMODE
+#ifdef COLDWATER
     // Similar to getCurrentTargets/applyTargets, but for lighting.
     getLightState();
 #endif    

@@ -116,7 +116,7 @@ void PIDinit()
   }
 }
 
-#ifdef LOGANMODE
+#ifdef COLDWATER
 /**
  * Get the desired lighting state (on/off) for the current time.
  * Note that we don't use relative time for lighting - it's assumed to be
@@ -131,15 +131,6 @@ void getLightState() {
   // may wrap back to the previous midnight.
   // lightPos is 0 at the start of a run, and then points to the latest position used.
 
-  // Delete this:
-  // light states
-  
-  // before first
-  // 0700
-  // between values
-  // 1900
-  // after last
-
   // If the actual time is less than the current start point, we are wrapping past midnight.
   // Point to the last time of day.
   if (lightMinutes[lightPos] > dayMin) lightPos = lightSteps;
@@ -151,4 +142,4 @@ void getLightState() {
   }
   // lightPos now points to the correct lightStatus with no further calculations.
 }
-#endif // LOGANMODE
+#endif // COLDWATER

@@ -8,7 +8,7 @@ void RelaysInit()
     //---( THEN set pins as Outputs )----
     pinMode(HeaterRelay[i], OUTPUT);
     pinMode(ChillRelay[i], OUTPUT);
-#ifdef LOGANMODE
+#ifdef COLDWATER
     digitalWrite(LightRelay[i], RELAY_OFF);
     pinMode(LightRelay[i], OUTPUT);
 #endif
@@ -19,7 +19,7 @@ void RelaysInit()
 /**
  * Relay Tests.  Writes 8 lines, numbered 1-8.
  * Each heater and chiller relay is turned on, then off.
- * In LOGANMODE test the light relays separately.
+ * In COLDWATER test the light relays separately.
  */
 void relayTest() {
   tft.fillScreen(BLACK);
@@ -44,7 +44,7 @@ void relayTest() {
     digitalWrite(ChillRelay[i], RELAY_OFF);
   }
 
-#ifdef LOGANMODE
+#ifdef COLDWATER
   delay(RELAY_PAUSE);
   wdt_reset();
   tft.fillScreen(BLACK);
@@ -67,10 +67,10 @@ void relayTest() {
         Serial.print("e "); Serial.println(millis());
 
   }
-#endif // LOGANMODE
+#endif // COLDWATER
 }
 
-// This was originally just for turning off heating and cooling, but in LOGANMODE we also
+// This was originally just for turning off heating and cooling, but in COLDWATER we also
 // check lights here.
 void updateRelays() {
   for (i=0; i<NT; i++) {
@@ -113,12 +113,13 @@ void updateRelays() {
         }
       }
     }
-#ifdef LOGANMODE
-    if (lightState[i]) {
+#ifdef COLDWATER
+    // All will be on or all off.
+    if (lightStatus[lightPos]) {
       digitalWrite(LightRelay[i], RELAY_ON);
     } else {
       digitalWrite(LightRelay[i], RELAY_OFF);
     }
-#endif // LOGANMODE
+#endif // COLDWATER
   }
 }

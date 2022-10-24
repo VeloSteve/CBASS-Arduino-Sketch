@@ -361,7 +361,7 @@ void printAsHM(unsigned int t) {
 }
 
 
-#ifdef LOGANMODE
+#ifdef COLDWATER
 //This block of code is only for systems with lights controlled by relays as specified in LightRelay[]
 /**
    Read the content of LightPln.ini  Lines can be comments or an on or off time.
@@ -470,7 +470,7 @@ void printLightPlan() {
   }
 }
 
-#endif // LOGANMODE
+#endif // COLDWATER
 
 
 

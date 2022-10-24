@@ -3,7 +3,7 @@
 
 // The original CBASS from the Barshis lab uses Iceprobe chillers.
 // The Logan lab modifications use moving cold water, and add light controls.
-#undef LOGANMODE  //#define for liquid cooling and lights.  Omit or #undef for the original behavior.
+#undef COLDWATER  //#define for liquid cooling and lights.  Omit or #undef for the original behavior.
 
 #undef USEBLE   // #define to use BLE, #undef USEBLE to remove all related code
 #ifdef USEBLE
@@ -26,7 +26,7 @@ char BLENAME[2*MAXPIN+1] = "My CBASS A";
 double RAMP_START_TEMP[] = {30.5, 30.75, 30.5, 30.75};  // This becomes the temperature target at any time.
 const short MAX_RAMP_STEPS = 20; // Could be as low as 7, 24*12+1 allows every 5 minutes for a day, with endpoints.
 
-#ifdef LOGANMODE
+#ifdef COLDWATER
 #define CHILLER_OFFSET 0.0
 #else
 #define CHILLER_OFFSET 0.20
@@ -44,7 +44,7 @@ const double TANK_TEMP_CORRECTION[] = {0, 0, 0, 0}; // Is a temperature correcti
 // Arduino pin numbers for relays.
 // The integers correspond to the CBASS-R v 1.2 schematic.
 const int HeaterRelay[] = {14, 15, 16, 17};
-#ifdef LOGANMODE
+#ifdef COLDWATER
 const int ChillRelay[] = {40, 38, 36, 34}; 
 const int LightRelay[] = {22, 23, 24, 25}; 
 const short MAX_LIGHT_STEPS = 4; // typically we have only 2 for sunrise and sunset
