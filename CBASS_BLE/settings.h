@@ -3,7 +3,7 @@
 
 // The original CBASS from the Barshis lab uses Iceprobe chillers.
 // The Logan lab modifications use moving cold water, and add light controls.
-#define LOGANMODE  //#define for liquid cooling and lights.  Omit or #undef for the original behavior.
+#undef LOGANMODE  //#define for liquid cooling and lights.  Omit or #undef for the original behavior.
 
 #undef USEBLE   // #define to use BLE, #undef USEBLE to remove all related code
 #ifdef USEBLE
@@ -47,6 +47,7 @@ const int HeaterRelay[] = {14, 15, 16, 17};
 #ifdef LOGANMODE
 const int ChillRelay[] = {40, 38, 36, 34}; 
 const int LightRelay[] = {22, 23, 24, 25}; 
+const short MAX_LIGHT_STEPS = 4; // typically we have only 2 for sunrise and sunset
 #else
 const int ChillRelay[] = {22, 23, 24, 25}; 
 #endif

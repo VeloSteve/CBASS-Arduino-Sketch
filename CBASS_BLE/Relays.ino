@@ -8,6 +8,10 @@ void RelaysInit()
     //---( THEN set pins as Outputs )----
     pinMode(HeaterRelay[i], OUTPUT);
     pinMode(ChillRelay[i], OUTPUT);
+#ifdef LOGANMODE
+    digitalWrite(LightRelay[i], RELAY_OFF);
+    pinMode(LightRelay[i], OUTPUT);
+#endif
   }
 
 }
@@ -15,6 +19,7 @@ void RelaysInit()
 /**
  * Relay Tests.  Writes 8 lines, numbered 1-8.
  * Each heater and chiller relay is turned on, then off.
+ * In LOGANMODE test the light relays separately.
  */
 void relayTest() {
   tft.fillScreen(BLACK);
@@ -27,6 +32,7 @@ void relayTest() {
     delay(RELAY_PAUSE);
     wdt_reset();
     digitalWrite(HeaterRelay[i], RELAY_OFF);
+    
     // Test one chiller relay
     tft.setCursor(0, (2 * i + 1) * LINEHEIGHT3);
 
@@ -37,8 +43,35 @@ void relayTest() {
     wdt_reset();
     digitalWrite(ChillRelay[i], RELAY_OFF);
   }
+
+#ifdef LOGANMODE
+  delay(RELAY_PAUSE);
+  wdt_reset();
+  tft.fillScreen(BLACK);
+  for (i = 0; i < NT; i++) {
+    Serial.print("a "); Serial.println(millis());
+    tft.setCursor(0, i * LINEHEIGHT3);
+    // Test one light relay
+    tft.print(i + 1); tft.print(". T"); tft.print(i + 1); tft.print("Light");
+    Serial.print(i + 1); Serial.print(". T"); Serial.print(i + 1); Serial.println("Light");
+        Serial.print("b "); Serial.println(millis());
+
+    digitalWrite(LightRelay[i], RELAY_ON);
+        Serial.print("c "); Serial.println(millis());
+
+    delay(RELAY_PAUSE);
+    wdt_reset();
+        Serial.print("d "); Serial.println(millis());
+
+    digitalWrite(LightRelay[i], RELAY_OFF);
+        Serial.print("e "); Serial.println(millis());
+
+  }
+#endif // LOGANMODE
 }
 
+// This was originally just for turning off heating and cooling, but in LOGANMODE we also
+// check lights here.
 void updateRelays() {
   for (i=0; i<NT; i++) {
     // We originally checked for TempOutput < 0, but that is never the case
@@ -80,5 +113,12 @@ void updateRelays() {
         }
       }
     }
+#ifdef LOGANMODE
+    if (lightState[i]) {
+      digitalWrite(LightRelay[i], RELAY_ON);
+    } else {
+      digitalWrite(LightRelay[i], RELAY_OFF);
+    }
+#endif // LOGANMODE
   }
 }

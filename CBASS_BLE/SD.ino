@@ -167,9 +167,10 @@ void readRampPlan() {
         break;
 #endif // USEBLE              
       case TEMP:
-        // Get a temperature or fail.  Get exactly NT values.
+        // Get a temperature or fail.  Repeat until we have exactly NT values.
         if (isSpace(c) || c == ',') break;  // keep looking
         if (isDigit(c)) {
+          // We are on the first digit of a temperature.  tempInHundredths reads it.
           rampHundredths[tempCount++][rampSteps] = tempInHundredths(c, f);
           // There can be many lines, taking more than 8 seconds to parse (at least with diagnostics on) so:
           wdt_reset();
@@ -358,6 +359,121 @@ void printAsHM(unsigned int t) {
   if (t % 60 < 10) printBoth("0");
   printBoth(t % 60);
 }
+
+
+#ifdef LOGANMODE
+//This block of code is only for systems with lights controlled by relays as specified in LightRelay[]
+/**
+   Read the content of LightPln.ini  Lines can be comments or an on or off time.
+   All tanks switch together, so there is only one on or off per line.
+   It is assumed that we want the last state specified, wrapping to the previous day if needed.  In the 
+   example below, if the system starts at 6 AM, lights should be off.
+
+  // A comment - must start at the beginning of a line
+  7:00 1
+  19:00 0
+  // The lines above mean on at 7 AM, off at 7 PM.
+*/
+void readLightPlan() {
+  Serial.println("Reading light plan");
+  lightSteps = 0;
+  // State machine:
+  const byte ID = 0;  // Identifying what type of line this is.
+  const byte SWITCH = 2;  // Read on or off as 1 or 0.
+  const byte NEXT = 3;  // Going to the start of the next line, ignoring anything before.
+  byte state = 0;
+  File f = SD.open("LightPln.ini", FILE_READ);
+  if (SD.exists("LightPln.ini")) {
+    Serial.println("The light plan exists.");
+  } else {
+    fatalError(F("---ERROR--- No light plan file!"));
+  }
+  char c;
+  while (f.available()) {
+    c = f.read();
+    switch (state) {
+      case ID:
+        // Valid characters are a digit of a number, slash, or whitespace
+        if (c == '/') {
+          state = NEXT;
+        }
+        else if (isDigit(c)) {
+          // Time at the start of a line must be the beginning of a switch point 
+          // Check that there is space to store a new step.
+          if (lightSteps >= MAX_LIGHT_STEPS) {
+            fatalError(F("Not enough light steps allowed!  Increase MAX_LIGHT_STEPS in Settings.ini"));
+            return;
+          }
+          lightMinutes[lightSteps] = timeInMinutes(c, f);
+          state = SWITCH;
+        }
+        else if (isSpace(c))  {
+          state = ID;  // ignore space or tab, keep going
+        }
+        else {
+          Serial.print("---ERROR in settings.txt.  Invalid line with ");
+          Serial.print(c);
+          Serial.println("---");
+        }
+        break;             
+      case SWITCH:
+        // Get an on off state or fail.
+        if (isSpace(c) || c == ',') break;  // keep looking
+        if (isDigit(c) && (c == '0' || c == '1')) {
+          lightStatus[lightSteps] = (c == '0') ? 0 : 1;
+          wdt_reset();
+        } else {
+          Serial.print("---ERROR in settings.txt--- Light switch state needed here. Got c = "); Serial.println(c);
+          fatalError(F("Incomplete light line."));
+        }
+        lightSteps++;
+        state = NEXT;
+        break;
+      case NEXT:
+        // Consume everything until any linefeed or characters have been removed, ready for  new line.
+        if (c == 10 || c == 13) { // LF or CR
+          // In case we have CR and LF consume the second one.
+          c = f.peek();
+          if (c == 10 || c == 13) {
+            c = f.read();
+          }
+          state = ID;
+        }
+        break;
+      default:
+        Serial.println("---ERROR IN LIGHT SETTINGS LOGIC---");
+        fatalError(F("Bad light settings logic"));
+
+    }
+
+  }
+  // It is okay to end in the NEXT or ID state, but otherwise we are mid-line and it's an error.
+  if (state != NEXT && state != ID) {
+    Serial.print("---ERROR out of light data with step incomplete.  state = "); Serial.println(state);
+    fatalError(F("Bad light settings line"));
+  }
+
+  f.close();
+  printLightPlan();
+}
+
+void printLightPlan() {
+  printBoth("Lighting Plan");
+  printlnBoth();
+  printBoth("Settings are based on time of day.");
+  printlnBoth();
+  printBoth("Time    Light State"); printlnBoth();
+  for (short k = 0; k < lightSteps; k++) {
+    printAsHM(lightMinutes[k]);
+    printBoth("   "); printBoth(lightStatus[k]);
+    printlnBoth();
+  }
+}
+
+#endif // LOGANMODE
+
+
+
 
 
 

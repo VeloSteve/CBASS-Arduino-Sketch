@@ -68,6 +68,14 @@ short rampSteps = 0;  // Actual defined steps, <= MAX_RAMP_STEPS
 boolean interpolateT = true; // If true, interpolate between ramp points, otherwise step.  
 boolean relativeStart = false;  // Start from midnight (default) or a specified time.
 unsigned int relativeStartTime;  // Start time in minutes from midnight
+#ifdef LOGANMODE
+// Light plan
+unsigned int lightMinutes[MAX_LIGHT_STEPS];
+byte lightStatus[MAX_LIGHT_STEPS];
+short lightSteps = 0;
+short lightPos = 0; // Current light state
+char LightStateStr[][4] = {"LLL", "LLL", "LLL", "LLL"}; // [number of entries][characters + null terminator]
+#endif // LOGANMODE
 
 //Temperature Variables
 double tempT[NT];
@@ -131,9 +139,11 @@ void setup()
   delay(2000); //Check that all relays are inactive at Reset
   RelaysInit();
 
-
   wdt_reset();
   readRampPlan();
+  #ifdef LOGANMODE
+  readLightPlan();
+  #endif
   wdt_reset();
   rampOffsets();  // This does not need repeating in the main loop.
   
@@ -151,7 +161,6 @@ void setup()
   bleOkay = bleSetup();
   #endif // USEBLE
 
-
   wdt_reset();
 
   tft.fillScreen(BLACK);
@@ -162,16 +171,19 @@ void setup()
   tft.print(printdate);
   Serial.println("PrintDate is:");
   Serial.println(printdate);
+  // Show RTC time so we know it's working.
+  tft.setCursor(0, LINEHEIGHT*4);
+  tft.print("Time: "); tft.print(gettime());
   delay(3000);
   wdt_reset();
-
-  tft.setCursor(0, LINEHEIGHT3*3);
-  tft.print("1. 5s Pause...");
+ 
+  tft.setCursor(0, LINEHEIGHT3*5);
+  tft.print(" 5s Pause...");
   Serial.println();
   Serial.println();
   Serial.print("Initialization sequence.");
   Serial.println();
-  Serial.print("1. 5s Pause...");
+  Serial.print(" 5s Pause...");
   Serial.println();
   delay(RELAY_PAUSE);
   wdt_reset();
@@ -192,7 +204,6 @@ void setup()
   GRAPHt = millis() - GRAPHwindow;
   #endif
 }
-
 
 /**
  * This loop checks temperatures and updates the heater and chiller states.  As of 21 Apr 2022 it takes about
@@ -230,6 +241,10 @@ void loop()
     timer24h = now_ms;
     getCurrentTargets();
     applyTargets();
+#ifdef LOGANMODE
+    // Similar to getCurrentTargets/applyTargets, but for lighting.
+    getLightState();
+#endif    
 
     ShowRampInfo();
 

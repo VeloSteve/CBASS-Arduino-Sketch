@@ -107,7 +107,7 @@ void ShowRampInfoDummy()
 
 void PIDinit()
 {
-  //tell the PID to range between 0 and the full window size
+  //tell the PID to range between 0 and the full window size.
   //turn the PID on
   for (i=0; i<NT; i++) {
     pids[i].SetMode(AUTOMATIC);
@@ -115,3 +115,40 @@ void PIDinit()
     pids[i].SetTunings(KP, KI, KD);
   }
 }
+
+#ifdef LOGANMODE
+/**
+ * Get the desired lighting state (on/off) for the current time.
+ * Note that we don't use relative time for lighting - it's assumed to be
+ * chosen relative to local daylight.
+ */
+void getLightState() {
+  t = rtc.now();  // May be redundant with checkTime() in the main loop.
+  unsigned int dayMin = t.minute() + 60 * t.hour();
+
+  // We can be before the specified points, between two, or after all of them.
+  // Unlike temperatures, we just want to use the most recent specified state, which
+  // may wrap back to the previous midnight.
+  // lightPos is 0 at the start of a run, and then points to the latest position used.
+
+  // Delete this:
+  // light states
+  
+  // before first
+  // 0700
+  // between values
+  // 1900
+  // after last
+
+  // If the actual time is less than the current start point, we are wrapping past midnight.
+  // Point to the last time of day.
+  if (lightMinutes[lightPos] > dayMin) lightPos = lightSteps;
+  else {
+    // Move up if necessary.
+    while (lightMinutes[lightPos+1] <= dayMin && lightPos < rampSteps - 1) {
+      lightPos++;
+    }
+  }
+  // lightPos now points to the correct lightStatus with no further calculations.
+}
+#endif // LOGANMODE

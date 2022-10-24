@@ -1,5 +1,10 @@
 const char monthsOfTheYear[12][4] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
                                      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+
+/* NOTE: The String class has the reputation of creating memory leaks.                                     
+ *  Using it a few times, such as at the start of a run, is probably fine,
+ *  but it should not be used in the main loop.
+ */
 String getdate()
 {
    t = rtc.now();
@@ -10,7 +15,11 @@ String getdate()
 String gettime()
 {
    t = rtc.now();
-   String tStr =  String(t.hour(), DEC) + ":" + String(t.minute(), DEC)  + ":" + String(t.second(), DEC);
+   String tStr =  String(t.hour(), DEC) + ":" 
+       + String((t.minute() < 10) ? "0" : "")  // Zero-pad minutes
+       + String(t.minute(), DEC)  + ":" 
+       + String((t.second() < 10) ? "0" : "")  // Zero-pad seconds
+       + String(t.second(), DEC);
    return tStr;
 }
 
