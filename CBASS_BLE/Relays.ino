@@ -32,7 +32,7 @@ void relayTest() {
     delay(RELAY_PAUSE);
     wdt_reset();
     digitalWrite(HeaterRelay[i], RELAY_OFF);
-    
+    delay(100); // A brief delay so you can hear the "off" relay action separately from the following "on"    
     // Test one chiller relay
     tft.setCursor(0, (2 * i + 1) * LINEHEIGHT3);
 
@@ -42,6 +42,7 @@ void relayTest() {
     delay(RELAY_PAUSE);
     wdt_reset();
     digitalWrite(ChillRelay[i], RELAY_OFF);
+    delay(100); // A brief delay so you can hear the "off" relay action separately from the following "on"    
   }
 
 #ifdef COLDWATER
