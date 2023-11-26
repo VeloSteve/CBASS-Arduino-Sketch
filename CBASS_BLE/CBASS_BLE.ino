@@ -234,8 +234,9 @@ void loop()
     if (0.0 < tempT[i] && tempT[i] < 80.0)  TempInput[i] = tempT[i];
   }
 
-  // Update temperature targets once per minute.
-  if ((now_ms - timer24h) > 60000) {
+  // Update temperature targets 10 times per minute.  This was once
+  // per minute, but that seems coarse, especially during faster ramps.
+  if ((now_ms - timer24h) > 6000) {
     checkTime();
 
     timer24h = now_ms;
